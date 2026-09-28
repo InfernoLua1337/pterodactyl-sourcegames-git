@@ -4,8 +4,8 @@ LABEL       author="Inferno" maintainer="inferno@cloudrp"
 LABEL       org.opencontainers.image.source="https://github.com/InfernoLua1337/pterodactyl-sourcegames-git"
 
 USER        root
-RUN         apt update \
-                && apt install -y git openssh-client \
+RUN         apt-get update --allow-releaseinfo-change \
+                && apt-get install -y --no-install-recommends git openssh-client \
                 && rm -rf /var/lib/apt/lists/*
 
 COPY        ./entrypoint.sh /entrypoint.sh
