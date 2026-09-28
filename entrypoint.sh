@@ -38,6 +38,7 @@ fi
 
 
 export GIT_SSH_COMMAND="ssh -i $SSH_KEY -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+git config --global --add safe.directory "*"
 
 # 2. repo
 if [ ! -d "$REPO_PATH/.git" ]; then
