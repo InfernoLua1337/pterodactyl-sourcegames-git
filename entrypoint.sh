@@ -26,16 +26,22 @@ if [ ! -f "$SSH_KEY" ]; then
     chmod 600 "$SSH_KEY"
     chmod 644 "$SSH_KEY.pub"
     echo ""
-    echo "[GIT SETUP] GitHub Deploy Keys:"
-    echo "https://github.com/InfernoLua1337/cloudrp/settings/keys"
+    echo "[GIT SETUP] Скопируйте этот публичный ключ в GitHub Deploy Keys:"
+    echo "👉 https://github.com/InfernoLua1337/cloudrp/settings/keys"
     echo "----------------------------------------------------------------"
     cat "$SSH_KEY.pub"
     echo "----------------------------------------------------------------"
-    echo "[GIT SETUP] Сервер остановлен. Добавьте ключ в GitHub и запустите сервер снова."
-    echo "================================================================"
-    exit 0
-fi
+    echo "[GIT SETUP] Ожидание добавления ключа на GitHub (до 5 минут)..."
+    echo "[GIT SETUP] (Добавьте ключ в GitHub, и скрипт продолжит автоматически)"
 
+    for i in {1..60}; do
+        if GIT_SSH_COMMAND="ssh -i $SSH_KEY -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git ls-remote "$REPO_URL" HEAD >/dev/null 2>&1; then
+            echo "[GIT SETUP] Отлично! Доступ к GitHub получен, продолжаем запуск."
+            break
+        fi
+        sleep 5
+    done
+fi
 
 export GIT_SSH_COMMAND="ssh -i $SSH_KEY -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 git config --global --add safe.directory "*"
